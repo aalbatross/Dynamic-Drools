@@ -1,4 +1,4 @@
-Dynamic Drools is a dynamic rule management system which allows to add and remove dynamically without stopping Drools Engine
+Dynamic Drools is a dynamic rule management system which allows to add and remove rules dynamically without stopping Drools Engine
 
 Running instruction:
 RUN JDrools.java as Server
