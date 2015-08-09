@@ -1,0 +1,17 @@
+package org;
+
+import knowledgeevents.*;
+
+ rule "01"
+ when
+  cir : Circle()
+ then
+  System.out.println("Circle Radius: "+cir.getRadius()); 
+ end
+ 
+ rule "02"
+ when
+  sqare : Square()
+ then
+  System.out.println("Square (Length, Width): ("+ sqare.getLength()+","+sqare.getWidth()+")"); 
+ end  

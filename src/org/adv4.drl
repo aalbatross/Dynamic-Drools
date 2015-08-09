@@ -1,0 +1,10 @@
+package rules;
+
+import knowledgeevents.*;
+
+rule "05"
+ when
+  sqare : Square()
+ then
+  System.out.println("Square of Square: "+Math.pow(sqare.getLength()*sqare.getWidth(),2)); 
+ end

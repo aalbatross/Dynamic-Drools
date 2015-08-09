@@ -1,0 +1,10 @@
+package rules;
+
+import knowledgeevents.*;
+
+rule "03"
+ when
+  cir : Circle()
+ then
+  System.out.println("Area of Circle: "+ 3.14*cir.getRadius()*cir.getRadius()); 
+ end

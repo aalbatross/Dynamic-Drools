@@ -1,0 +1,10 @@
+package rules;
+
+import knowledgeevents.*;
+
+rule "06"
+ when
+  eval(true)
+ then
+  System.out.println((a>b)?a:b); 
+ end

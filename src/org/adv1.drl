@@ -1,0 +1,10 @@
+package rules;
+
+import knowledgeevents.*;
+
+rule "04"
+ when
+  sqare : Square()
+ then
+  System.out.println("Area of Square: "+sqare.getLength()*sqare.getWidth()); 
+ end
