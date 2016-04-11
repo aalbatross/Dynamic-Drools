@@ -12,6 +12,8 @@ import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
 import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
+import org.drools.runtime.StatelessKnowledgeSession;
+import org.drools.runtime.rule.StatelessRuleSession;
 
 /**
  *
@@ -22,7 +24,7 @@ public class Drooler {
     private String[] ruleSource;
     private KnowledgeBuilder kbuilder;
     private KnowledgeBase kbase;
-    private StatefulKnowledgeSession ksession;
+    private StatelessKnowledgeSession ksession;
     
     public Drooler(String[] initRules)
     {
@@ -44,7 +46,7 @@ public class Drooler {
             }
             this.kbase=KnowledgeBaseFactory.newKnowledgeBase();
             this.kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
-            this.ksession=this.kbase.newStatefulKnowledgeSession();
+            this.ksession=this.kbase.newStatelessKnowledgeSession();
         }
         catch(Exception e)
         {
@@ -95,19 +97,13 @@ public class Drooler {
         this.kbase = kbase;
     }
 
-    /**
-     * @return the ksession
-     */
-    public StatefulKnowledgeSession getKsession() {
-        return ksession;
-    }
+	public StatelessKnowledgeSession getKsession() {
+		return ksession;
+	}
 
-    /**
-     * @param ksession the ksession to set
-     */
-    public void setKsession(StatefulKnowledgeSession ksession) {
-        this.ksession = ksession;
-    }
-    
+	public void setKsession(StatelessKnowledgeSession ksession) {
+		this.ksession = ksession;
+	}
+   
     
 }

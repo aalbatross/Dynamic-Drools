@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Collection;
 import java.util.Iterator;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -22,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+
 import org.drools.builder.KnowledgeBuilder;
 import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
@@ -45,7 +47,33 @@ public class JDrools extends JPanel implements ActionListener {
     private Drooler drools;
     private ServerSocket server;
     
-    
+    /**
+     * @param args the command line arguments
+     */
+    class NetworkThread implements Runnable
+    {   
+        public void run() {
+            try
+                    {
+                        System.out.println("Started!!!");
+                        while(true)
+                        {
+                            Socket s=server.accept();
+                            ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
+                            Object read = ois.readObject();
+                            System.out.println("Data coming "+read.getClass().toString());
+                            drools.getKsession().execute(read);
+                           // drools.getKsession().fireAllRules();
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+        }
+                
+    }
+
     
     public JDrools()
     {
@@ -90,34 +118,6 @@ public class JDrools extends JPanel implements ActionListener {
         
        this.setSize(700,360);         
     }
-    /**
-     * @param args the command line arguments
-     */
-    class NetworkThread implements Runnable
-    {
-
-        @Override
-        public void run() {
-            try
-                    {
-                        System.out.println("Started!!!");
-                        while(true)
-                        {
-                            Socket s=server.accept();
-                            ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
-                            Object read = ois.readObject();
-                            System.out.println("Data coming "+read.getClass().toString());
-                            drools.getKsession().insert(read);
-                            drools.getKsession().fireAllRules();
-                        }
-                    }
-                    catch(Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-        }
-                
-    }
     
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -131,7 +131,6 @@ public class JDrools extends JPanel implements ActionListener {
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==this.startEngine)
         {
@@ -141,14 +140,14 @@ public class JDrools extends JPanel implements ActionListener {
                 
                 this.server=new ServerSocket(port);
                 System.out.println(port+" "+InetAddress.getLocalHost().getHostAddress());
-                this.drools=new Drooler(new String[]{JDrools.class.getResource("basic.drl").getFile()});
+                this.drools=new Drooler(new String[]{JDrools.class.getResource("JDrools.class").getPath().replace("/target/classes/org/JDrools.class", "/src/main/java/org/basic.drl")});
                 Collection<KnowledgePackage> kpkg = this.drools.getKbase().getKnowledgePackages();
-                Iterator i=   kpkg.iterator();
+                Iterator<KnowledgePackage> i=   kpkg.iterator();
 			while(i.hasNext())
 			{
 				KnowledgePackage kp=(KnowledgePackage)i.next();
 				Collection<Rule> r= kp.getRules();
-				Iterator i1=r.iterator();
+				Iterator<Rule> i1=r.iterator();
 					while(i1.hasNext())
 					{
 						Rule x=(Rule)i1.next();
@@ -215,12 +214,12 @@ public class JDrools extends JPanel implements ActionListener {
     {
         this.showAllRule.removeAllItems();
         Collection<KnowledgePackage> kpkg = this.drools.getKbase().getKnowledgePackages();
-                Iterator i=   kpkg.iterator();
+                Iterator<KnowledgePackage> i=   kpkg.iterator();
 			while(i.hasNext())
 			{
 				KnowledgePackage kp=(KnowledgePackage)i.next();
 				Collection<Rule> r= kp.getRules();
-				Iterator i1=r.iterator();
+				Iterator<Rule> i1=r.iterator();
 					while(i1.hasNext())
 					{
 						Rule x=(Rule)i1.next();
